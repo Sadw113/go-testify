@@ -3,7 +3,6 @@ package main
 import (
 	"net/http"
 	"net/http/httptest"
-	"strconv"
 	"strings"
 	"testing"
 
@@ -25,12 +24,10 @@ func TestMainHandlerWhenOk(t *testing.T) {
 	bodySlice := strings.Split(body.String(), ",")
 	require.NotEmpty(t, body)
 
-	url := strings.Split(req.URL.String(), "=")
-	expectedCountStr := string(url[1][0])
-	expectedCount, _ := strconv.Atoi(expectedCountStr)
+	expectedCount := 2
 	require.Len(t, bodySlice, expectedCount)
 
-	city := string(url[2])
+	city := "moscow"
 	expectedAnswer := strings.Join(cafeList[city][:expectedCount], ",")
 	require.Equal(t, expectedAnswer, body.String())
 }
@@ -65,8 +62,7 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	bodySlice := strings.Split(body.String(), ",")
 	assert.Len(t, bodySlice, totalCount)
 
-	url := strings.Split(req.URL.String(), "=")
-	city := string(url[2])
+	city := "moscow"
 	expectedAnswer := strings.Join(cafeList[city], ",")
 	require.Equal(t, expectedAnswer, body.String())
 }
